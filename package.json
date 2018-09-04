@@ -12,16 +12,28 @@
   "author": "Nathaniel Ledford",
   "license": "ISC",
   "dependencies": {
-    "@octokit/rest": "^15.11.0",
+    "axios": "^0.18.0",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "configstore": "^4.0.0",
     "figlet": "^1.2.0",
+    "fs-extra": "^7.0.0",
+    "googleapis": "^33.0.0",
     "inquirer": "^6.2.0",
+    "instagram-private-api": "^0.6.8",
     "lodash": "^4.17.10",
+    "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
+    "moment": "^2.22.2",
     "simple-git": "^1.96.0",
     "touch": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/lodash": "^4.14.116",
+    "@types/mime-types": "^2.1.0",
+    "@types/node": "^10.9.4",
+    "typescript": "^3.0.3"
   }
 }
