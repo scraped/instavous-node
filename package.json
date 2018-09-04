@@ -27,11 +27,12 @@
     "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
-    "simple-git": "^1.96.0",
     "touch": "^3.1.0"
   },
   "devDependencies": {
+    "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^5.0.4",
+    "@types/inquirer": "0.0.43",
     "@types/lodash": "^4.14.116",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^10.9.4",
