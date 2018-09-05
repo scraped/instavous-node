@@ -59,6 +59,10 @@ export default class Instagram {
         return session
     }
 
+    /**
+     * Stores the credentials locally on the user's machine
+     * @returns An object containing the credentials
+     */
     public static async setInstagramCredentials(): Promise<ICredentials> {
         const credentials = await inquirer.askInstagramCredentials() as ICredentials
         conf.set('instagram.username', credentials.username)
@@ -66,6 +70,10 @@ export default class Instagram {
         return credentials
     }
 
+    /**
+     * Unsaves a post on Instagram
+     * @param postId The ID of the post on Instagram
+     */
     public static async unsavePost(postId: string): Promise<void> {
         const session = await this.getInstagramSession()
 
