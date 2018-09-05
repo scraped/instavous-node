@@ -65,8 +65,4 @@ export default class Instagram {
         conf.set('instagram.password', credentials.password)
         return credentials
     }
-
-    public static async createInstagramSession() {
-        
-    }
 }
