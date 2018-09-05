@@ -17,41 +17,22 @@ const Client = require('instagram-private-api').V1
 const USERNAME_KEY = 'instagram.username'
 const PASSWORD_KEY = 'instagram.password'
 
-const getAccountFeed = async (feed: any, posts: Posts, counter: any, count: number = 0): Promise<Posts> => {
-    const results = await feed.get()        
+const getMedia = async (feed: any, posts: Posts, counter: any, count: number = 0): Promise<Posts> => {
+    const results = await feed.get()
 
     for (const result of results) {
-        const raw = result._params
-        posts.addRawPost(raw)
-
+        posts.addRawPost(result._params)
         counter.message(`${++count} posts found`)
     }
 
     if (!feed.isMoreAvailable()) {
-        await sleep (1000)
+        await sleep(1000)
         process.stdout.write(`\n`)
         counter.stop()
         return posts
     }
 
-    return getAccountFeed(feed, posts, counter, count)
-}
-
-const getSavedMedia = async (feed: any, posts: Posts): Promise<Posts> => {
-    const results = feed.get()
-
-    for (const result of results) {
-        const raw = result._params
-        posts.addRawPost(raw)
-    }
-
-    if (!feed.isMoreAvailable()) {
-        console.log('done')
-        return posts
-    }
-    console.log('More')
-
-    return await getSavedMedia(feed, posts)
+    return await getMedia(feed, posts, counter, count)
 }
 
 export default class Instagram {
@@ -92,7 +73,7 @@ export default class Instagram {
         const feed = new Client.Feed.UserMedia(session, accountId, 10)
 
         counter.start()
-        return await getAccountFeed(feed, posts, counter)        
+        return await getMedia(feed, posts, counter)        
     }
 
     /**
@@ -145,8 +126,10 @@ export default class Instagram {
 
         const session = await this.getInstagramSession()
         const feed = new Client.Feed.SavedMedia(session, 10)
+        const counter = new Spinner(`0 posts found`, ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'])
         
-        await getSavedMedia(feed, posts)
+        counter.start()
+        await getMedia(feed, posts, counter)
 
         return posts
     }
