@@ -3,6 +3,10 @@ import { flattenDeep, uniq } from 'lodash'
 import Image from './Image'
 import Post from './Post'
 import Instagram from '../../../lib/instagram'
+import { sleep } from '../../../lib/utils'
+
+const CLI = require('clui')
+const Spinner = CLI.Spinner
 
 export default class Posts {
     private _posts: Post[]
@@ -73,13 +77,18 @@ export default class Posts {
         const images = this.getImagesFromPosts()
         const total = this.NumOfImages
 
+        const counter = new Spinner(`0/${total} images downloaded`)
+
         let index = 1
+        counter.start()
         await Promise.all(images.map(async (image) => {
             const destPath = temp ? image.TempPath : image.LocalPath
             image.downloadImage(destPath)
-
-            // TODO add info informing user of how many images have been downloaded
+            counter.message(`${index++}/${total} images downloaded`)
         }))
+        await sleep(1000)
+        process.stdout.write(`\n`)
+        counter.stop()
     }
 
     /**
