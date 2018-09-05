@@ -4,9 +4,10 @@ import Configstore from 'configstore'
 import _ from 'lodash'
 import inquirer from './inquirer'
 
-import ICredentials from '../models/app/ICredentials'
 import app from './app'
 import files from './files'
+import ICredentials from '../models/app/ICredentials'
+import Posts from '../models/vendor/instagram/Posts'
 
 const CLI = require('clui')
 const Spinner = CLI.Spinner
@@ -19,7 +20,84 @@ const Client = require('instagram-private-api').V1
 const USERNAME_KEY = 'instagram.username'
 const PASSWORD_KEY = 'instagram.password'
 
+const getAccountFeed = async (feed: any, posts: Posts, count: number = 0): Promise<any> => {
+    const results = await feed.get()        
+
+    for (const result of results) {
+        const raw = result._params
+        posts.addRawPost(raw)
+
+        // TODO inform user of how many posts were found
+        // log(`${++count} posts found`)
+    }
+
+    if (!feed.isMoreAvailable()) {
+        console.log(' ')
+        return posts
+    }
+
+    return getAccountFeed(feed, posts, count)
+}
+
+const getSavedMedia = async (feed: any, posts: Posts): Promise<Posts> => {
+    const results = feed.get()
+
+    for (const result of results) {
+        const raw = result._params
+        posts.addRawPost(raw)
+    }
+
+    if (!feed.isMoreAvailable()) {
+        console.log('done')
+        return posts
+    }
+    console.log('More')
+
+    return await getSavedMedia(feed, posts)
+}
+
 export default class Instagram {
+    /**
+     * Returns the account ID for a given username
+     * @param username An Instagram username
+     * @returns        The account ID
+     */
+    public static async getAccountId(username: string): Promise<string> {
+        const session = await this.getInstagramSession()
+        const response = await Client.Account.searchForUser(session, username)
+        return response.id
+    }
+
+    /**
+     * Retrieves the account information for a given username as JSON
+     * @param username An Instagram username
+     */
+    public static async getAccount(username: string): Promise<any> {
+        const session = await this.getInstagramSession()
+        const accountId = await this.getAccountId(username)
+        const response = await Client.Account.getById(session, accountId)
+
+        return response._params
+    }
+
+    /**
+     * Retrieves all the posts from an Instagram account
+     * @param username An Instagram username
+     */
+    public static async getAccountFeed(username: string): Promise<Posts> {
+        const posts: Posts = new Posts()
+
+        const session = await this.getInstagramSession()
+        const accountId = await this.getAccountId(username)
+
+        const feed = new Client.Feed.UserMedia(session, accountId, 10)
+
+        return await getAccountFeed(feed, posts)
+    }
+
+    /**
+     * Gets the username of the Instagram account
+     */
     public static getUsername(): string {
         return conf.get(USERNAME_KEY) as string
     }
@@ -57,6 +135,20 @@ export default class Instagram {
         
         status.stop()
         return session
+    }
+
+    /**
+     * Gets all the posts saved by the current Instagram user
+     */
+    public static async getSavedMedia(): Promise<Posts> {
+        const posts: Posts = new Posts()
+
+        const session = await this.getInstagramSession()
+        const feed = new Client.Feed.SavedMedia(session, 10)
+        
+        await getSavedMedia(feed, posts)
+
+        return posts
     }
 
     /**
