@@ -65,4 +65,10 @@ export default class Instagram {
         conf.set('instagram.password', credentials.password)
         return credentials
     }
+
+    public static async unsavePost(postId: string): Promise<void> {
+        const session = await this.getInstagramSession()
+
+        await Client.Save.destroy(session, postId)
+    }
 }
