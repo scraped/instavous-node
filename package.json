@@ -18,6 +18,7 @@
     "clear": "^0.1.0",
     "clui": "^0.3.6",
     "configstore": "^4.0.0",
+    "dotenv": "^6.0.0",
     "figlet": "^1.2.0",
     "fs-extra": "^7.0.0",
     "googleapis": "^33.0.0",
@@ -27,15 +28,21 @@
     "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
-    "touch": "^3.1.0"
+    "touch": "^3.1.0",
+    "username": "^4.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@types/configstore": "^2.1.1",
+    "@types/dotenv": "^4.0.3",
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^5.0.4",
     "@types/inquirer": "0.0.43",
     "@types/lodash": "^4.14.116",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^10.9.4",
+    "@types/username": "^3.0.0",
+    "@types/uuid": "^3.4.4",
     "typescript": "^3.0.3"
   }
 }
