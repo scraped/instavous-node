@@ -20,6 +20,14 @@ export default class Files {
         }
     }
 
+    public static fileExists(filePath: string): boolean {
+        try {
+            return fs.statSync(filePath).isFile()
+        } catch (err) {
+            return false
+        }
+    }
+
     public static getAppDirectory(): string {
         const dir = path.join(`.${pkg.name}`)
         return this.getDirectory(dir)
