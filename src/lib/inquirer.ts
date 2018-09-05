@@ -1,15 +1,16 @@
 import inquirer from 'inquirer'
 
+const INSTAGRAM_USERNAME_REGEX = /^([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)$/
+
 const usernameQuestion = {
     name: 'username',
     type: 'input',
     message: 'Enter the Instagram username:',
     validate: (value: string): boolean | string => {
-        if (value.length) {
+        if (value.length && INSTAGRAM_USERNAME_REGEX.test(value)) {
             return true
-        } else {
-            return 'Please enter an Instagram username.'
-        }
+        }        
+        return 'Please enter a valid Instagram username.'
     }
 }
 
@@ -60,7 +61,10 @@ export default class Inquirer {
                 type: 'input',
                 message: 'Enter your Instagram username:',
                 validate: (value: string): boolean | string => {
-                    return value.length ? true : 'Please enter your Instagram username'
+                    if (value.length && INSTAGRAM_USERNAME_REGEX.test(value)) {
+                        return true
+                    }
+                    return 'Please enter a valid Instagram username.'
                 }
             },
             {
