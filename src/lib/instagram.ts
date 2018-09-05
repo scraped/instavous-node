@@ -5,6 +5,7 @@ import files from './files'
 import inquirer from './inquirer'
 import ICredentials from '../models/app/ICredentials'
 import Posts from '../models/vendor/instagram/Posts'
+import { sleep } from '../lib/utils'
 
 const CLI = require('clui')
 const Spinner = CLI.Spinner
@@ -16,23 +17,24 @@ const Client = require('instagram-private-api').V1
 const USERNAME_KEY = 'instagram.username'
 const PASSWORD_KEY = 'instagram.password'
 
-const getAccountFeed = async (feed: any, posts: Posts, count: number = 0): Promise<any> => {
+const getAccountFeed = async (feed: any, posts: Posts, counter: any, count: number = 0): Promise<Posts> => {
     const results = await feed.get()        
 
     for (const result of results) {
         const raw = result._params
         posts.addRawPost(raw)
 
-        // TODO inform user of how many posts were found
-        // log(`${++count} posts found`)
+        counter.message(`${++count} posts found`)
     }
 
     if (!feed.isMoreAvailable()) {
-        console.log(' ')
+        await sleep (1000)
+        process.stdout.write(`\n`)
+        counter.stop()
         return posts
     }
 
-    return getAccountFeed(feed, posts, count)
+    return getAccountFeed(feed, posts, counter, count)
 }
 
 const getSavedMedia = async (feed: any, posts: Posts): Promise<Posts> => {
@@ -85,10 +87,12 @@ export default class Instagram {
 
         const session = await this.getInstagramSession()
         const accountId = await this.getAccountId(username)
+        const counter = new Spinner(`0 posts found`, ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'])
 
         const feed = new Client.Feed.UserMedia(session, accountId, 10)
 
-        return await getAccountFeed(feed, posts)
+        counter.start()
+        return await getAccountFeed(feed, posts, counter)        
     }
 
     /**
