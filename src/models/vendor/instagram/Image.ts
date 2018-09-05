@@ -135,6 +135,12 @@ export default class Image {
      * SOURCE: https://futurestud.io/tutorials/download-files-images-with-axios-in-node-js
      */
     public async downloadImage(destPath: string): Promise<any> {
+        if (files.fileExists(destPath)) {
+            return new Promise((resolve, reject) => {
+                resolve()
+            })
+        }
+
         const response = await axios({
             method: 'GET',
             url: this._media,
