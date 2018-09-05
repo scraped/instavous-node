@@ -1,19 +1,15 @@
-import path from 'path'
-
 import Configstore from 'configstore'
-import _ from 'lodash'
-import inquirer from './inquirer'
 
 import app from './app'
 import files from './files'
+import inquirer from './inquirer'
 import ICredentials from '../models/app/ICredentials'
 import Posts from '../models/vendor/instagram/Posts'
 
 const CLI = require('clui')
 const Spinner = CLI.Spinner
 
-const pkg = require('../../package.json')
-const conf = new Configstore(pkg.name)
+const conf = new Configstore(app.getAppName())
 
 const Client = require('instagram-private-api').V1
 
