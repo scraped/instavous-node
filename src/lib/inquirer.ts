@@ -1,8 +1,59 @@
 import inquirer from 'inquirer'
-import * as files from './files'
+
+const usernameQuestion = {
+    name: 'username',
+    type: 'input',
+    message: 'Enter the Instagram username:',
+    validate: (value: string): boolean | string => {
+        if (value.length) {
+            return true
+        } else {
+            return 'Please enter an Instagram username.'
+        }
+    }
+}
+
+const tempQuestion = {
+    name: 'temp',
+    type: 'confirm',
+    message: 'Would you like to save the images temporarily?',
+    default: false
+}
 
 export default class Inquirer {
-    public static askInstagramCredentials(): Promise<inquirer.Questions> {
+    public static askTask(): Promise<any> {
+        const questions: inquirer.Questions = [
+            {
+                name: 'task',
+                type: 'list',
+                message: 'What would you like to do?',
+                choices: [
+                    { value: 'accountfeed', name: 'Download feed for specific account'},
+                    { value: 'savedmedia', name: 'Download media saved by your account'}
+                ]
+            }
+        ]
+        return inquirer.prompt(questions)
+    }
+
+    public static askAccountFeedQuestions(): Promise<any> {
+        const questions: inquirer.Questions = [
+            usernameQuestion,
+            tempQuestion,
+        ]
+
+        return inquirer.prompt(questions)
+    }
+
+    public static askSavedMedia(): Promise<any> {
+        const questions: inquirer.Questions = [
+            tempQuestion,
+        ]
+
+        return inquirer.prompt(questions)
+    }
+
+    public static askInstagramCredentials(): Promise<any> {
         const questions: inquirer.Questions = [
             {
                 name: 'username',
