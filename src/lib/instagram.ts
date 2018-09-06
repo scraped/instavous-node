@@ -1,6 +1,5 @@
-import Configstore from 'configstore'
-
 import app from './app'
+import config from './config'
 import files from './files'
 import inquirer from './inquirer'
 import ICredentials from '../models/app/ICredentials'
@@ -10,12 +9,7 @@ import { sleep } from '../lib/utils'
 const CLI = require('clui')
 const Spinner = CLI.Spinner
 
-const conf = new Configstore(app.getAppName())
-
 const Client = require('instagram-private-api').V1
-
-const USERNAME_KEY = 'instagram.username'
-const PASSWORD_KEY = 'instagram.password'
 
 const getMedia = async (feed: any, posts: Posts, counter: any, count: number = 0): Promise<Posts> => {
     const results = await feed.get()
@@ -80,7 +74,7 @@ export default class Instagram {
      * Gets the username of the Instagram account
      */
     public static getUsername(): string {
-        return conf.get(USERNAME_KEY) as string
+        return config.getInstagramUsername()!
     }
 
     /**
@@ -91,8 +85,8 @@ export default class Instagram {
     public static async getInstagramSession(): Promise<any> {
         const device = new Client.Device(`${app.getAppName()}-${app.getAppVersion()}`)
         
-        let username = conf.get(USERNAME_KEY)
-        let password = conf.get(PASSWORD_KEY)
+        let username = config.getInstagramUsername()
+        let password = config.getInstagramPassword()
 
         if (!username || !password) {
             const credentials = await this.setInstagramCredentials()
@@ -140,8 +134,7 @@ export default class Instagram {
      */
     public static async setInstagramCredentials(): Promise<ICredentials> {
         const credentials = await inquirer.askInstagramCredentials() as ICredentials
-        conf.set('instagram.username', credentials.username)
-        conf.set('instagram.password', credentials.password)
+        config.setInstagramCredentials(credentials)
         return credentials
     }
 
