@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
@@ -29,6 +30,7 @@
     "inquirer": "^6.2.0",
     "instagram-private-api": "^0.6.8",
     "lodash": "^4.17.10",
+    "mathjs": "^5.1.1",
     "mime-types": "^2.1.20",
     "minimist": "^1.2.0",
     "moment": "^2.22.2",
@@ -37,12 +39,14 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.24",
     "@types/configstore": "^2.1.1",
     "@types/dotenv": "^4.0.3",
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^5.0.4",
     "@types/inquirer": "0.0.43",
     "@types/lodash": "^4.14.116",
+    "@types/mathjs": "^4.4.1",
     "@types/mime-types": "^2.1.0",
     "@types/node": "^10.9.4",
     "@types/username": "^3.0.0",
