@@ -1,32 +1,28 @@
-import app from './app'
 import config from './config'
 import files from './files'
 import inquirer from './inquirer'
 import ICredentials from '../models/app/ICredentials'
 import Posts from '../models/vendor/instagram/Posts'
-import { sleep } from '../lib/utils'
 
 const CLI = require('clui')
 const Spinner = CLI.Spinner
 
 const Client = require('instagram-private-api').V1
 
-const getMedia = async (feed: any, posts: Posts, counter: any, count: number = 0): Promise<Posts> => {
+// const INSTAGRAM_PAGE_SIZE: number = 18
+
+const getMedia = async (feed: any, posts: Posts): Promise<Posts> => {
     const results = await feed.get()
 
     for (const result of results) {
         posts.addRawPost(result._params)
-        counter.message(`${++count} posts found`)
     }
 
     if (!feed.isMoreAvailable()) {
-        await sleep(1000)
-        process.stdout.write(`\n`)
-        counter.stop()
         return posts
     }
 
-    return await getMedia(feed, posts, counter, count)
+    return await getMedia(feed, posts)
 }
 
 export default class Instagram {
@@ -53,6 +49,12 @@ export default class Instagram {
         return response._params
     }
 
+    public static async getAccountNumOfPosts(username: string): Promise<number> {
+        const account = await this.getAccount(username)
+
+        return +account.mediaCount
+    }
+
     /**
      * Retrieves all the posts from an Instagram account
      * @param username An Instagram username
@@ -62,12 +64,11 @@ export default class Instagram {
 
         const session = await this.getInstagramSession()
         const accountId = await this.getAccountId(username)
-        const counter = new Spinner(`0 posts found`, ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'])
+        const feed = new Client.Feed.UserMedia(session, accountId)
 
-        const feed = new Client.Feed.UserMedia(session, accountId, 10)
+        await getMedia(feed, posts)
 
-        counter.start()
-        return await getMedia(feed, posts, counter)        
+        return posts
     }
 
     /**
@@ -119,10 +120,8 @@ export default class Instagram {
 
         const session = await this.getInstagramSession()
         const feed = new Client.Feed.SavedMedia(session, 10)
-        const counter = new Spinner(`0 posts found`, ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'])
-        
-        counter.start()
-        await getMedia(feed, posts, counter)
+                
+        await getMedia(feed, posts)
 
         return posts
     }
