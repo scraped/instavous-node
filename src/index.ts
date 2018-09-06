@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import figlet from 'figlet'
 
 import inquirer from './lib/inquirer'
-import Instagram from './lib/instagram';
+import Instagram from './lib/instagram'
 
 const clear = require('clear')
 
