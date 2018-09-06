@@ -1,7 +1,7 @@
 import Configstore from 'configstore'
 
 import app from './app'
-import ICredentials from '../models/app/ICredentials';
+import ICredentials from '../models/app/ICredentials'
 
 const conf = new Configstore(app.getAppName())
 
@@ -17,7 +17,7 @@ export default class Config {
             return null
         }
     }
-    
+
     public static getInstagramPassword(): string | null {
         try {
             const password = conf.get(INSTAGRAM_PASSWORD_KEY)
