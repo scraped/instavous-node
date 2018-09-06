@@ -3,7 +3,7 @@ import os from 'os'
 import path from 'path'
 import uuidv4 from 'uuid/v4'
 
-const pkg = require('../../package.json')
+import app from './app'
 
 export default class Files {
     public static createDirectory(dir: string): void {
@@ -29,7 +29,7 @@ export default class Files {
     }
 
     public static getAppDirectory(): string {
-        const dir = path.join(`.${pkg.name}`)
+        const dir = path.join(os.homedir(), `.${app.getAppName()}`)
         return this.getDirectory(dir)
     }
 
@@ -55,7 +55,7 @@ export default class Files {
     }
 
     public static getUsersDirectory(): string {
-        const dir = path.join(this.getAppDirectory(), 'users')
+        const dir = path.join(this.getCurrentDirectoryBase(), 'users')
         return this.getDirectory(dir)
     }
 
