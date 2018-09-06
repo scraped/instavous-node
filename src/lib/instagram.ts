@@ -82,9 +82,7 @@ export default class Instagram {
      * 
      * @returns An Instagram session
      */
-    public static async getInstagramSession(): Promise<any> {
-        const device = new Client.Device(`${app.getAppName()}-${app.getAppVersion()}`)
-        
+    public static async getInstagramSession(): Promise<any> {        
         let username = config.getInstagramUsername()
         let password = config.getInstagramPassword()
 
@@ -100,7 +98,8 @@ export default class Instagram {
         const status = new Spinner('Retrieving Instagram session. Please wait...')
         status.start()
 
-        let session;
+        let session: any;
+        const device = new Client.Device(`${config.getInstagramUsername()}`)
 
         if (files.directoryExists(cookiePath)) {
             session = new Client.Session(device, storage) 
