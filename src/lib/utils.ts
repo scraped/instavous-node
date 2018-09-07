@@ -7,12 +7,13 @@ export const sleep = async (ms: number): Promise<{}> => {
 
 /**
  * SOURCE: https://gist.github.com/Integralist/749153aa53fea7168e7e#gistcomment-1457123
- * @param array 
+ * @param array An array to flatten
+ * @returns     A flattened array
  */
-export const flattenArray = (array: Array<any>): Array<any> => {
-    const flattenedArray: Array<any> = [].concat(...array)
-    return flattenedArray.some(Array.isArray) 
-        ? flattenArray(flattenedArray) 
+export const flattenArray = <T>(array: T[]): T[] => {
+    const flattenedArray: T[] = ([] as T[]).concat(...array)
+    return flattenedArray.some(Array.isArray)
+        ? flattenArray(flattenedArray)
         : flattenedArray
 }
 
