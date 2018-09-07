@@ -1,12 +1,14 @@
+import CLI from 'clui'
+
 import config from './config'
 import files from './files'
 import inquirer from './inquirer'
 import ICredentials from '../models/app/ICredentials'
 import Posts from '../models/vendor/instagram/Posts'
 
-const CLI = require('clui')
 const Spinner = CLI.Spinner
 
+// tslint:disable-next-line:no-var-requires
 const Client = require('instagram-private-api').V1
 
 // const INSTAGRAM_PAGE_SIZE: number = 18
@@ -79,11 +81,12 @@ export default class Instagram {
     }
 
     /**
-     * Check if an Instagram cookie exists. If yes, returns an existing session. If no, creates a new cookie and returns a new session.
-     * 
+     * Check if an Instagram cookie exists. If yes, returns an existing session.
+     * If no, creates a new cookie and returns a new session.
+     *
      * @returns An Instagram session
      */
-    public static async getInstagramSession(): Promise<any> {        
+    public static async getInstagramSession(): Promise<any> {
         let username = config.getInstagramUsername()
         let password = config.getInstagramPassword()
 
@@ -91,11 +94,11 @@ export default class Instagram {
             const credentials = await this.setInstagramCredentials()
             username = credentials.username
             password = credentials.password
-        }        
+        }
 
         const cookiePath = files.getCookiePath(username)
         const storage = new Client.CookieFileStorage(cookiePath)
-        
+
         const status = new Spinner('Retrieving Instagram session. Please wait...')
         status.start()
 
@@ -103,11 +106,11 @@ export default class Instagram {
         const device = new Client.Device(`${config.getInstagramUsername()}`)
 
         if (files.directoryExists(cookiePath)) {
-            session = new Client.Session(device, storage) 
+            session = new Client.Session(device, storage)
         } else {
             session = await Client.Session.create(device, storage, username, password)
         }
-        
+
         status.stop()
         return session
     }
@@ -120,7 +123,7 @@ export default class Instagram {
 
         const session = await this.getInstagramSession()
         const feed = new Client.Feed.SavedMedia(session, 10)
-                
+
         await getMedia(feed, posts)
 
         return posts
