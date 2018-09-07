@@ -9,7 +9,7 @@ const usernameQuestion = {
     validate: (value: string): boolean | string => {
         if (value.length && INSTAGRAM_USERNAME_REGEX.test(value)) {
             return true
-        }        
+        }
         return 'Please enter a valid Instagram username.'
     }
 }
