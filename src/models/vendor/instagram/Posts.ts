@@ -1,3 +1,4 @@
+import CLI from 'clui'
 import { flattenDeep, uniq } from 'lodash'
 
 import Image from './Image'
@@ -5,7 +6,6 @@ import Post from './Post'
 import Instagram from '../../../lib/instagram'
 import { sleep } from '../../../lib/utils'
 
-const CLI = require('clui')
 const Spinner = CLI.Spinner
 
 export default class Posts {
@@ -25,9 +25,9 @@ export default class Posts {
 
     /**
      * Adds a Post to the collection
-     * 
+     *
      * @param post The post to add to the collection
-     * @returns    The post that was added to the collection 
+     * @returns    The post that was added to the collection
      */
     public addPost(post: Post): Post {
         this._posts.push(post)
@@ -50,7 +50,10 @@ export default class Posts {
         let images: Image[] = []
 
         if (hasMultipleImages) {
-            images = raw.carouselMedia.map((i: any, x: number) => new Image(id, username, i._params.images[0].url, timestamp, x + 1))
+            images =
+                raw.carouselMedia.map((i: any, x: number) => {
+                    return new Image(id, username, i._params.images[0].url, timestamp, x + 1)
+                })
         } else {
             images = [new Image(id, username, raw.images[0].url, timestamp)]
         }
@@ -66,7 +69,7 @@ export default class Posts {
      * @returns      The post
      */
     public getPost(postId: string): Post {
-        return this._posts.find(post => post.PostId === postId)!
+        return this._posts.find((post) => post.PostId === postId)!
     }
 
     /**
