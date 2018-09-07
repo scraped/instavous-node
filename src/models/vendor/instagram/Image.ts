@@ -22,24 +22,24 @@ export default class Image {
     private _timestamp: Moment
 
     /**
-     * The name of the file once it has been downloaded from Instagram. 
+     * The name of the file once it has been downloaded from Instagram.
      * Combines the username, the timestamp of the photo, the index, and the original file name.
-     * 
+     *
      * @returns The file name
      */
     public get FileName(): string {
         const parsed = url.parse(this._media)
         const original = path.basename(parsed.pathname!)
 
-        return `${this.AccountName}-` 
-                + `${this._timestamp.format('YYYYMMDD')}-` 
-                + `${this._index}-` 
+        return `${this.AccountName}-`
+                + `${this._timestamp.format('YYYYMMDD')}-`
+                + `${this._index}-`
                 + `${original}`
     }
 
     /**
      * The path where the file will be stored locally.
-     * 
+     *
      * @returns The file path
      */
     public get FilePath(): string {
@@ -48,7 +48,7 @@ export default class Image {
         const year = this._timestamp.format('YYYY')
         const month = this._timestamp.format('MM-MMM')
         const day = this._timestamp.format('DD')
-        
+
         const filePath = path.join(firstCharacter, this.AccountName, year, month, day, 'Misc')
 
         return filePath
@@ -56,7 +56,7 @@ export default class Image {
 
     /**
      * Constructs the local file path
-     * 
+     *
      * @returns The local file path
      */
     public get LocalPath(): string {
@@ -81,17 +81,17 @@ export default class Image {
 
     /**
      * The timestamp of the image as a Date object
-     * 
+     *
      * @returns A JavaScript date
      */
     public get TimeStamp(): Date {
         return this._timestamp.toDate()
     }
 
-    constructor(public InstagramPostId: string, 
-                public AccountName: string, 
-                media: string, 
-                timestamp: number, 
+    constructor(public InstagramPostId: string,
+                public AccountName: string,
+                media: string,
+                timestamp: number,
                 index: number = 1) {
         this._index = index
         this._media = media.indexOf('?') === -1 ? media : media.substring(0, media.indexOf('?'))
@@ -105,27 +105,27 @@ export default class Image {
         let output =  `\tURL:       ${this.Url}\n`
             output += `\tFile Name: ${this.FileName}\n`
             output += `\tFile Path: ${this.FilePath}\n`
-            
+
         console.log(output)
     }
 
     /**
      * Builds an Image object
-     * 
+     *
      * @param instagramPostId The ID of the post from which the Image came
      * @param accountName     The name of the account
      * @param media           The image URL
      * @param timestamp       The post timestamp
-     * 
+     *
      * @returns An image object
      */
-    public static buildImage(instagramPostId: string, 
-                             accountName: string, 
-                             media: string, 
+    public static buildImage(instagramPostId: string,
+                             accountName: string,
+                             media: string,
                              timestamp: number): Image {
-        const image = new Image(instagramPostId, 
-                accountName, 
-                media, 
+        const image = new Image(instagramPostId,
+                accountName,
+                media,
                 timestamp)
 
         return image
@@ -153,11 +153,10 @@ export default class Image {
             response.data.on('end', () => {
               resolve()
             })
-        
+
             response.data.on('error', () => {
               reject()
             })
           })
     }
 }
-
