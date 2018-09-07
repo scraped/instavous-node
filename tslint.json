@@ -6,8 +6,10 @@
     "jsRules": {},
     "rules": {
         "align": false,
+        "curly": false,
         "member-ordering": false,
         "no-console": false,
+        "object-literal-shorthand": false,
         "object-literal-sort-keys": false,
         "ordered-imports": false,
         "quotemark": false,
