@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
 import chalk from 'chalk'
+import clear from 'clear'
 import figlet from 'figlet'
 
 import inquirer from './lib/inquirer'
 import Instagram from './lib/instagram'
-
-const clear = require('clear')
 
 const run = async () => {
     clear()
@@ -16,26 +15,30 @@ const run = async () => {
         )
     )
 
-    const result = (await inquirer.askTask()).task
-   
+    const result: string = (await inquirer.askTask()).task
+
+    let answers: any
+    let temp: any
+    let posts: any
+
     switch (result) {
         case 'accountfeed':
-            var answers = await inquirer.askAccountFeedQuestions()
+            answers = await inquirer.askAccountFeedQuestions()
             process.stdout.write(`\n`)
 
             const username = answers.username
-            var temp = answers.temp
+            temp = answers.temp
 
-            var posts = await Instagram.getAccountFeed(username)
+            posts = await Instagram.getAccountFeed(username)
             await posts.downloadImages(temp)
 
             break
         case 'savedmedia':
-            var answers = await inquirer.askSavedMedia()
+            answers = await inquirer.askSavedMedia()
             process.stdout.write(`\n`)
-            
-            var temp = answers.temp
-            var posts = await Instagram.getSavedMedia()
+
+            temp = answers.temp
+            posts = await Instagram.getSavedMedia()
             await posts.downloadImages(temp)
 
             break
