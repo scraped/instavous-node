@@ -8,7 +8,7 @@ export default class Post {
 
     /**
      * All of the images included in the post
-     * 
+     *
      * @returns An array of Images
      */
     public get Images(): Image[] {
