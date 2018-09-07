@@ -2,10 +2,13 @@
 
 import chalk from 'chalk'
 import clear from 'clear'
+import dotenv from 'dotenv'
 import figlet from 'figlet'
 
 import inquirer from './lib/inquirer'
 import Instagram from './lib/instagram'
+
+dotenv.config()
 
 const run = async () => {
     clear()

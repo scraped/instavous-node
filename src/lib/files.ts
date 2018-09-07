@@ -47,6 +47,18 @@ export default class Files {
         return path.basename(process.cwd())
     }
 
+    public static getGoogleDriveDirectory(): string {
+        const rootPath = path.dirname(process.env.GOOGLE_APPLICATION_CREDENTIALS as string)
+
+        const dir = path.join(this.getAppDirectory(), rootPath)
+        return this.getDirectory(dir)
+    }
+
+    public static getGoogleDrivePath(): string {
+        const filePath = path.join(this.getGoogleDriveDirectory(), 'auth.json')
+        return filePath
+    }
+
     public static getTemporaryCookie(): string {
         const dir = os.tmpdir()
         const fileName = `${uuidv4()}.json`
