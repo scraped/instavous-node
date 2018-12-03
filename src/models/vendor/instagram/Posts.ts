@@ -98,7 +98,7 @@ export default class Posts {
      * Extracts individual images from multiple posts in a single array
      */
     public getImagesFromPosts(): Image[] {
-        return flattenDeep(this._posts.map((post) => post.Images.map((image) => image)))
+        return flattenDeep(this._posts.map((post) => post.Images.map((image) => image))) as Image[]
     }
 
     /**
