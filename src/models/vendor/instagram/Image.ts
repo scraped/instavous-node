@@ -141,22 +141,24 @@ export default class Image {
             })
         }
 
-        const response = await axios({
+        await axios({
             method: 'GET',
             url: this._media,
             responseType: 'stream'
+        }).then((response: any) => {
+            response.data.pipe(fs.createWriteStream(destPath))
+
+            return new Promise((resolve, reject) => {
+                response.data.on('end', () => {
+                  resolve()
+                })
+    
+                response.data.on('error', () => {
+                  reject()
+                })
+              })
+        }).catch((error: any) => {
+            // console.log(error.response)
         })
-
-        response.data.pipe(fs.createWriteStream(destPath))
-
-        return new Promise((resolve, reject) => {
-            response.data.on('end', () => {
-              resolve()
-            })
-
-            response.data.on('error', () => {
-              reject()
-            })
-          })
     }
 }
